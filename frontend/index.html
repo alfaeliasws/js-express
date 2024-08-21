@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script type="module" src="htmlStore.js">
+    import  {clickTask} from "./htmlStore.js"
+    module.clickTask = clickTask
+  </script>
+
+</head>
+<body class="flex flex-wrap w-full h-full" id="allBody">
+  <section class="flex w-full flex-wrap min-h-full">
+    <main class="w-6/12 flex-end rounded-lg min-h-[100vw] pt-5 pl-3 pb-3">
+      <section class="flex flex-wrap w-full flex-start">
+        <button id="addProject" class="bg-blue-600 px-3 py-2 min-h-4 mr-5 rounded-lg text-white font-semibold hover:opacity-60 transition-all" onclick="clickAddProject()">Add Project</button>
+        <button id="addTask" class="bg-blue-600 px-3 py-2 min-h-4 gap-3 rounded-lg text-white font-semibold hover:opacity-60 transition-all" onclick="clickAddTask()">Add Task</button>
+      </section>
+      <section class="flex flex-wrap w-full px-8 pt-8" id="iterateProjectTask">
+        <div class="flex flex-start w-full flex-wrap">
+          
+        </div>
+      </section>
+
+    </main>
+    <section class="w-6/12 flex-end  rounded-lg min-h-full flex flex-wrap">
+
+      <section id="addProjectModal" class="w-full m-3 flex-end bg-yellow-200 rounded-lg min-h-[100vw]">
+        <div class="pl-8 pt-4 w-full text-black flex flex-wrap pr-3">
+          <p class="pt-2 text-black font-bold flex flex-wrap flex-start w-full justify-start text-lg pb-10">Add Project</p>
+          </select>
+          <label for="addProjectName" class="pt-2 pb-2 px-4 font-medium w-full flex-start justify-start mt-4 mb-1">Project Name</label>
+          <input type="text" name="addProjectName" id="addProjectName" class="rounded-lg font-medium w-full px-3 py-2 tracking-wide">
+
+          <p id="addProjectStatus" class="pt-2 pb-2 px-4 font-medium w-full flex-start justify-start mt-4 mb-1">Status: Draft</p>
+
+          <p id="addProjectProgress" class="pt-2 pb-2 px-4 font-medium w-full flex-start justify-start mt-4 mb-1">Progress: 0%</p>
+
+          <section class="flex flex-wrap w-full justify-between mt-8">
+            <button id="deleteAddProject" class="bg-red-600 px-3 py-2 min-h-4 mr-5 rounded-lg text-white font-semibold hover:opacity-60 transition-all" onclick="deleteAddProject()">Hapus</button>
+            <button id="saveAddProject" class="bg-blue-600 px-3 py-2 min-h-4 gap-3 rounded-lg text-white font-semibold hover:opacity-60 transition-all" onclick="saveAddProject()">Simpan</button>
+          </section>
+
+        </div>
+      </section>
+
+
+      <section id="addTaskModal" class="w-full m-3 flex-end bg-yellow-200 rounded-lg min-h-[100vw]">
+        <div class="pl-8 pt-4 w-full text-black flex flex-wrap pr-3">
+          <p class="pt-2 text-black font-bold flex flex-wrap flex-start w-full justify-start text-lg pb-10">Add Task</p>
+          <label for="projectInTaskSelect" class="pt-2 pb-2 px-4 font-medium w-full flex-start justify-start mt-4 mb-1">Project</label>
+          <select name="projectInTaskSelect" id="projectInTaskSelect" class="rounded-lg font-medium w-full px-3 py-2 tracking-wide mb-4"> 
+
+          </select>
+          <label for="taskName" class="pt-2 pb-2 px-4 font-medium w-full flex-start justify-start mt-4 mb-1">Task</label>
+          <input type="text" name="taskName" id="addTaskName" class="rounded-lg font-medium w-full px-3 py-2 tracking-wide">
+          <label for="addTaskWeight" class="pt-2 pb-2 px-4 font-medium w-full flex-start justify-start mt-4 mb-1">Bobot</label>
+          <input type="text" name="addTaskWeight" min="0" id="addTaskWeight" class="rounded-lg font-medium w-full px-3 py-2 tracking-wide">
+          <label for="addTaskWeight" class="pt-2 pb-2 px-4 font-medium w-full flex-start justify-start mt-4 mb-1">Status</label>
+          <select name="addTaskStatus" id="addTaskStatus" class="rounded-lg font-medium w-full px-3 py-2 tracking-wide mb-4"> 
+            <option>Draft</option>
+            <option>In Progress</option>
+            <option>Done</option>
+          </select>
+
+          <section class="flex flex-wrap w-full justify-between mt-8">
+            <button id="deleteAddTask" class="bg-red-600 px-3 py-2 min-h-4 mr-5 rounded-lg text-white font-semibold hover:opacity-60 transition-all" onclick="deleteAddTask()">Hapus</button>
+            <button id="saveAddTask" class="bg-blue-600 px-3 py-2 min-h-4 gap-3 rounded-lg text-white font-semibold hover:opacity-60 transition-all" onclick="saveAddTask()">Simpan</button>
+          </section>
+
+        </div>
+      </section>
+
+
+      <section id="updateProjectModal" class="w-full m-3 flex-end bg-yellow-200 rounded-lg min-h-[100vw]">
+        <div class="pl-8 pt-4 w-full text-black flex flex-wrap pr-3">
+          <p class="pt-2 text-black font-bold flex flex-wrap flex-start w-full justify-start text-lg pb-10">Update Project</p>
+          </select>
+          <label for="updateProjectName" class="pt-2 pb-2 px-4 font-medium w-full flex-start justify-start mt-4 mb-1">Project Name</label>
+          <input type="text" name="updateProjectName" id="updateProjectName" class="rounded-lg font-medium w-full px-3 py-2 tracking-wide">
+
+          <p id="updateProjectStatus" class="pt-2 pb-2 px-4 font-medium w-full flex-start justify-start mt-4 mb-1">Status: Draft</p>
+
+          <p id="updateProjectProgress" class="pt-2 pb-2 px-4 font-medium w-full flex-start justify-start mt-4 mb-1">Progress: 0%</p>
+
+          <section class="flex flex-wrap w-full justify-between mt-8">
+            <button id="deleteUpdateProject" class="bg-red-600 px-3 py-2 min-h-4 mr-5 rounded-lg text-white font-semibold hover:opacity-60 transition-all" onclick="deleteUpdateProject()">Hapus</button>
+            <button id="saveUpdateProject" class="bg-blue-600 px-3 py-2 min-h-4 gap-3 rounded-lg text-white font-semibold hover:opacity-60 transition-all" onclick="saveUpdateProject()">Simpan</button>
+          </section>
+
+        </div>
+      </section>
+
+
+      <section id="updateTaskModal" class="w-full m-3 flex-end bg-yellow-200 rounded-lg min-h-[100vh] hidden">
+        <div class="pl-8 pt-4 w-full text-black flex flex-wrap pr-3">
+          <p class="pt-2 text-black font-bold flex flex-wrap flex-start w-full justify-start text-lg pb-10">Update Task</p>
+          <p id="projectInTaskUpdate" class="pt-2 font-medium w-full flex-start justify-start mb-4">Project</p>
+          <label for="taskName" class="pt-2 pb-2 px-4 font-medium w-full flex-start justify-start mt-4 mb-1">Task</label>
+          <input type="text" name="taskName" id="updateTaskName" class="rounded-lg font-medium w-full px-3 py-2 tracking-wide">
+          <label for="taskWeight" class="pt-2 pb-2 px-4 font-medium w-full flex-start justify-start mt-4 mb-1">Bobot</label>
+          <input type="number" min="0" name="taskWeight" id="updateTaskWeight" class="rounded-lg font-medium w-full px-3 py-2 tracking-wide">
+          <label for="taskWeight" class="pt-2 pb-2 px-4 font-medium w-full flex-start justify-start mt-4 mb-1">Status</label>
+          <select name="taskStatus" id="updateTaskStatus" class="rounded-lg font-medium w-full px-3 py-2 tracking-wide mb-4"> 
+            <option>Draft</option>
+            <option>In Progress</option>
+            <option>Done</option>
+          </select>
+
+          <section class="flex flex-wrap w-full justify-between mt-8">
+            <button id="deleteUpdateTask" class="bg-red-600 px-3 py-2 min-h-4 mr-5 rounded-lg text-white font-semibold hover:opacity-60 transition-all" onclick="deleteUpdateTask()">Hapus</button>
+            <button id="saveUpdateTask" class="bg-blue-600 px-3 py-2 min-h-4 gap-3 rounded-lg text-white font-semibold hover:opacity-60 transition-all" onclick="saveUpdateTask()">Simpan</button>
+          </section>
+
+        </div>
+      </section>
+
+
+      <section id="addDirectTaskModal" class="w-full m-3 flex-end bg-yellow-200 rounded-lg min-h-[100vh] h-fuil hidden">
+        <div class="pl-8 pt-4 w-full text-black flex flex-wrap pr-3">
+          <p class="pt-2 text-black font-bold flex flex-wrap flex-start w-full justify-start text-lg pb-10">Add Task</p>
+          <p id="projectInTaskDirectAdd" class="pt-2 font-medium w-full flex-start justify-start mb-4">Project</p>
+          <label for="addDirectTaskName" class="pt-2 pb-2 px-4 font-medium w-full flex-start justify-start mt-4 mb-1">Task</label>
+          <input type="text" name="addDirectTaskName" id="addDirectTaskName" class="rounded-lg font-medium w-full px-3 py-2 tracking-wide">
+          <label for="addDirectTaskWeight" class="pt-2 pb-2 px-4 font-medium w-full flex-start justify-start mt-4 mb-1">Bobot</label>
+          <input type="text" name="addDirectTaskWeight" min="0" id="addDirectTaskWeight" class="rounded-lg font-medium w-full px-3 py-2 tracking-wide">
+          <label for="addDirectTaskWeight" class="pt-2 pb-2 px-4 font-medium w-full flex-start justify-start mt-4 mb-1">Status</label>
+          <select name="addDirectTaskStatus" id="addDirectTaskStatus" class="rounded-lg font-medium w-full px-3 py-2 tracking-wide mb-4"> 
+            <option>Draft</option>
+            <option>In Progress</option>
+            <option>Done</option>
+          </select>
+
+          <section class="flex flex-wrap w-full justify-between mt-8 pb-12">
+            <button id="deleteDirectAddTask" class="bg-red-600 px-3 py-2 min-h-4 mr-5 rounded-lg text-white font-semibold hover:opacity-60 transition-all" onclick="deleteDirectAddTask()">Hapus</button>
+            <button id="saveDirectAddTask" class="bg-blue-600 px-3 py-2 min-h-4 gap-3 rounded-lg text-white font-semibold hover:opacity-60 transition-all" onclick="saveDirectAddTask()">Simpan</button>
+          </section>
+
+        </div>
+      </section>
+
+    </section>
+  </section>
+</body>
+</html>

@@ -16,7 +16,7 @@ async function getAll() {
 
   let {success, message, status, tasks}  = variableInitiator()
 
-  const result = await db.query(`SELECT * FROM tasks WHERE deleted_at IS NULL`)
+  const result = await db.query(`SELECT t.*, p.project FROM tasks t LEFT JOIN projects p ON p.id = t.project_id WHERE t.deleted_at IS NULL AND p.deleted_at IS NULL`)
   tasks = helper.emptyOrRows(result);
   
   if ((result?.length ?? 0) > 0) {
@@ -36,7 +36,7 @@ async function getAll() {
 
 async function getById(id) {
     let {success, message, status, tasks}  = variableInitiator()
-    const result = await db.query(`SELECT * FROM tasks WHERE id = ? AND deleted_at IS NULL`, [id])
+    const result = await db.query(`SELECT t.*, p.project FROM tasks t LEFT JOIN projects p ON t.project_id = p.id  WHERE id = ? AND t.deleted_at IS NULL AND p.deleted_at IS NULL`, [id])
     tasks = helper.emptyOrRows(result);
 
     if (result) {
@@ -57,7 +57,7 @@ async function getById(id) {
 async function create(body) {
   let {success, message, status, tasks}  = variableInitiator()
   
-  const result = await db.query(`INSERT INTO tasks (task, weight, status) VALUES (? ,  ?)`, [body.task, body.weight, body.status])
+  const result = await db.query(`INSERT INTO tasks (task, weight, status, project_id) VALUES (? , ? , ?, ?)`, [body.task, body.weight, body.status, body.project_id])
   tasks = helper.emptyOrRows(result);
 
   if (result) {
@@ -78,14 +78,31 @@ async function create(body) {
 
 async function update(body) {
   let {success, message, status, tasks}  = variableInitiator()
-  
-  const progressQuery = await db.query(`SELECT progress = SUM(CASE WHEN t.status = "Done" THEN t.wait ELSE 0 END)/SUM(t.weight)*100 FROM tasks t ON t.project_id = p.id WHERE t.project_id = ? AND t.deleted_at IS NULL AND t.deleted_at IS NULL GROUP BY p.id`, [body.id, body.project_id])
 
-  const progress = progressQuery[0].progress
+  const result = await db.query(`UPDATE tasks set task = ?, status = ?, weight = ?, updated_at = NOW() WHERE id = ? AND deleted_at IS NULL`, [body.task, body.status, body.weight, body.id])
+
+  const progressQuery = await db.query(`SELECT SUM(CASE WHEN t.status = "Done" THEN t.weight ELSE 0 END)/SUM(t.weight)*100 AS progressCalc, SUM(CASE WHEN t.status = "In Progress" THEN t.weight - 1 WHEN t.status = "Done" THEN t.weight ELSE 0 END)/SUM(t.weight)*100 AS projectStatus, p.id  FROM tasks t LEFT JOIN projects p ON t.project_id = p.id WHERE t.project_id = ? AND t.deleted_at IS NULL AND t.deleted_at IS NULL GROUP BY p.id`, [body.project_id])
+
+  const queryResult = helper.emptyOrRows(progressQuery);
+
+  console.log({queryResult})
+
+  const progress = queryResult[0].progressCalc
+  const projectId = queryResult[0].id
+  const projectStatusDb = queryResult[0].projectStatus
 
   let progressStatus = "Draft"
+  let projectStatus = "Draft"
 
-  if (progress < 100 && progreess > 0) {
+  if(parseInt(projectStatusDb) > 0 && parseInt(projectStatusDb) < 100){
+    projectStatus = "In Progress"
+  }
+
+  if(parseInt(projectStatusDb) === 100){
+    projectStatus = "Done"
+  }
+
+  if (progress < 100 && progress > 0) {
     progressStatus = "In Progress"
   }
 
@@ -93,9 +110,9 @@ async function update(body) {
     progressStatus = "Done"
   }
 
-  await db.query(`UPDATE projects SET `, [progress[0].progress])
+  console.log(progress, projectStatus, projectId)
 
-  const result = await db.query(`UPDATE tasks set task = ?, status = ?, progress = ? WHERE id = ? AND deleted_at IS NULL`, [body.task, progressStatus, progress, body.id])
+  await db.query(`UPDATE projects SET progress = ?, status = ?, updated_at = NOW() WHERE id = ? AND projects.deleted_at IS NULL`, [progress, projectStatus, projectId])
 
   tasks = helper.emptyOrRows(result);
 
@@ -115,10 +132,12 @@ async function update(body) {
 
 }
 
-async function remove(body) {
+async function remove(id) {
   let {success, message, status, tasks}  = variableInitiator()
   
-const result = await db.query(`UPDATE tasks set deleted_at = NOW() WHERE id = ? AND deleted_at IS NULL`, [body.id]);
+  console.log({id})
+
+  const result = await db.query(`UPDATE tasks set deleted_at = NOW() WHERE id = ? AND deleted_at IS NULL`, [id]);
   tasks = helper.emptyOrRows(result);
 
   if (result) {

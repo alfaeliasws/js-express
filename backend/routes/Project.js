@@ -3,7 +3,7 @@ const router = express.Router();
 const project = require("../services/Project");
 
 /* GET programming languages. */
-router.get("/project/", async function (req, res, next) {
+router.get("/", async function (req, res, next) {
   try {
     res.json(await project.getAll());
   } catch (err) {
@@ -12,7 +12,7 @@ router.get("/project/", async function (req, res, next) {
   }
 });
 
-router.get("/project/:id", async function (req, res, next) {
+router.get("/:id", async function (req, res, next) {
   try {
     res.json(await project.getById(req.params.id));
   } catch (err) {
@@ -21,9 +21,9 @@ router.get("/project/:id", async function (req, res, next) {
   }
 });
 
-router.post("/project/:id", async function (req, res, next) {
+router.post("/", async function (req, res, next) {
   try {
-    res.json(await project.create(req.params.id));
+    res.json(await project.create(req.body));
   } catch (err) {
     console.error(`Create data failed `, err.message);
     next(err);
@@ -31,18 +31,18 @@ router.post("/project/:id", async function (req, res, next) {
 });
 
 
-router.put("/project/:id", async function (req, res, next) {
+router.put("/:id", async function (req, res, next) {
   try {
-    res.json(await project.update(req.params.id));
+    res.json(await project.update(req.params.id, req.body));
   } catch (err) {
     console.error(`Update data failed `, err.message);
     next(err);
   }
 });
 
-router.delete("/project/", async function (req, res, next) {
+router.delete("/:id", async function (req, res, next) {
   try {
-    res.json(await project.delete(req.params.id));
+    res.json(await project.remove(req.params.id));
   } catch (err) {
     console.error(`Delete data failed `, err.message);
     next(err);

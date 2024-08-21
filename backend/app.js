@@ -12,36 +12,13 @@ const projectRouter = require("./routes/Project");
 
 startExpress();
 
-function authenticateToken(req, res, next) {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-
-  if (token == null) return res.sendStatus(401);
-  jwt.verify(token, process.env.TOKEN_SECRET, function (err, decoded) {
-    if (err) {
-      if (err.name === "TokenExpiredError") {
-        return res.sendStatus(403);
-      }
-      next();
-    } else {
-      next();
-    }
-    // next();
-  });
-}
-
 function startExpress() {
   const app = express();
   app.use(cors());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
-  // app.use(baseURL + "/auth", authRouter);
   app.use(baseURL + "/task",  taskRouter);
-  // app.use(baseURL + "/token", tokenRouter);
   app.use(baseURL + "/project", projectRouter)
-  // app.get(baseURL + "", [authenticateToken], (req, res) => {
-  //   res.json({ message: "ok" });
-  // });
 
   /* Error handler middleware */
   app.use((err, req, res, next) => {
