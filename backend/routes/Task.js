@@ -33,7 +33,7 @@ router.post("/task/:id", async function (req, res, next) {
 
 router.put("/task/:id", async function (req, res, next) {
   try {
-    res.json(await task.update(req.params.id));
+    res.json(await task.update(req.body));
   } catch (err) {
     console.error(`Update data failed `, err.message);
     next(err);

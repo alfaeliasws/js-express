@@ -7,6 +7,7 @@ const baseURL = config.util.base;
 const authRouter = require("./routes/Auth");
 const tokenRouter = require("./routes/Tokens");
 const taskRouter = require("./routes/Task");
+const projectRouter = require("./routes/Project");
 // const jwt = require("jsonwebtoken");
 
 startExpress();
@@ -34,12 +35,13 @@ function startExpress() {
   app.use(cors());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
-  app.use(baseURL + "/auth", authRouter);
-  app.use(baseURL + "/token", tokenRouter);
+  // app.use(baseURL + "/auth", authRouter);
+  app.use(baseURL + "/task",  taskRouter);
+  // app.use(baseURL + "/token", tokenRouter);
+  app.use(baseURL + "/project", projectRouter)
   // app.get(baseURL + "", [authenticateToken], (req, res) => {
   //   res.json({ message: "ok" });
   // });
-  app.use(baseURL + "/jobs",  taskRouter);
 
   /* Error handler middleware */
   app.use((err, req, res, next) => {
